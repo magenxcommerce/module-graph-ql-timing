@@ -1,6 +1,7 @@
 {
     "name": "magenxcommerce/module-graph-ql-timing",
     "description": "Emits a Server-Timing response header with the GraphQL controller's dispatch duration so storefront request latency can be split into network vs Magento app time.",
+    "version": "1.0.0",
     "config": {
         "sort-packages": true
     },
