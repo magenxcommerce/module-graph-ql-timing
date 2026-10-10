@@ -23,35 +23,25 @@ use Magento\Framework\App\Response\HttpInterface as HttpResponse;
  * Cheap (a single header on an already-built response) and side-effect free, so
  * it is safe to leave always-on; it is only surfaced when the storefront's
  * GRAPHQL_PROFILE flag is set.
+ *
+ * An around plugin so the start time lives in a local variable: the plugin is
+ * a shared instance, and under an application server (FrankenPHP worker mode)
+ * a property set by one request would still be there for the next.
  */
 class ServerTimingPlugin
 {
     /**
-     * @var float|null
+     * Time the dispatch and stamp the elapsed time onto the response.
      */
-    private $startedAt = null;
-
-    /**
-     * Mark the dispatch start.
-     */
-    public function beforeDispatch(
+    public function aroundDispatch(
         FrontControllerInterface $subject,
-        RequestInterface $request
-    ): array {
-        $this->startedAt = microtime(true);
-        return [$request];
-    }
-
-    /**
-     * Stamp the elapsed dispatch time onto the response.
-     */
-    public function afterDispatch(
-        FrontControllerInterface $subject,
-        ResponseInterface $result,
+        callable $proceed,
         RequestInterface $request
     ): ResponseInterface {
-        if ($this->startedAt !== null && $result instanceof HttpResponse) {
-            $ms = (microtime(true) - $this->startedAt) * 1000.0;
+        $startedAt = microtime(true);
+        $result = $proceed($request);
+        if ($result instanceof HttpResponse) {
+            $ms = (microtime(true) - $startedAt) * 1000.0;
             $result->setHeader(
                 'Server-Timing',
                 sprintf('magento-app;desc="magento dispatch";dur=%.1f', $ms),
