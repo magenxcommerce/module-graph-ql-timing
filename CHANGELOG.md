@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/magenxcommerce/module-graph-ql-timing/compare/v1.0.1...v1.0.2) (2026-11-01)
+
+
+### Bug Fixes
+
+* require PHP 8.4 or newer ([#8](https://github.com/magenxcommerce/module-graph-ql-timing/issues/8)) ([7605633](https://github.com/magenxcommerce/module-graph-ql-timing/commit/7605633f36a8828f8a7bdb3ac8b063059338c978))
+
 ## [1.0.1](https://github.com/magenxcommerce/module-graph-ql-timing/compare/v1.0.0...v1.0.1) (2026-10-10)
 
 
